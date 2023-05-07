@@ -9,12 +9,15 @@
     "cypress:version": "cypress version",
     "cypress:info": "cypress info",
     "cypress:cache:list": "cypress cache list",
-    "list-videos": "ls -l cypress/videos"
+    "list-videos": "ls -l cypress/videos",
+    "serve": "serve dist"
   },
   "keywords": [],
   "author": "Cypress-io",
   "license": "ISC",
   "devDependencies": {
+    "cypress": "12.11.0",
+    "serve": "14.2.0"
   },
   "repository": {
     "type": "git",

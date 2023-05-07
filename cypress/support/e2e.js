@@ -1,20 +1,25 @@
-// ***********************************************************
-// This example support/index.js is processed and
-// loaded automatically before your test files.
-//
-// This is a great place to put global configuration and
-// behavior that modifies Cypress.
-//
-// You can change the location of this file or turn off
-// automatically serving support files with the
-// 'supportFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/configuration
-// ***********************************************************
+/// <reference types="cypress" />
 
-// Import commands.js using ES2015 syntax:
-import './commands'
+Cypress.Commands.add(
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  'shouldNotBeActionable',
+  { prevSubject: 'element' },
+  (subject, done, { position, timeout = 100, ...clickOptions } = {}) => {
+    cy.once('fail', (err) => {
+      expect(err.message).to.include('`cy.click()` failed because this element')
+      expect(err.message).to.include('is being covered by another element')
+      done()
+    })
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+    const chainable = position
+      ? cy.wrap(subject).click(position, { timeout, ...clickOptions })
+      : cy.wrap(subject).click({ timeout, ...clickOptions })
+
+    chainable.then(() =>
+      done(
+        new Error('Expected element NOT to be clickable, but click() succeeded')
+      )
+    )
+  }
+)
